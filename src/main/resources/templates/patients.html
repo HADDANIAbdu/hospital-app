@@ -44,9 +44,17 @@
                 <a href="/patients/create">
                     <button class="btn add-new btn-primary ms-3" type="button">
                         <i class="fa-solid fa-plus me-3"></i>
-                        <span>Add New Event</span>
+                        <span>Add New Patient</span>
                     </button>
                 </a>
+                <form th:method="post" th:action="@{/patients/changeSize}" class="d-flex align-items-center mt-3">
+                    <label for="pageSize" class="me-2">Page Size:</label>
+                    <input type="number" name="size" id="pageSize" th:value="${size}" min="1" class="form-control me-2" style="width: 80px;">
+                    <input type="hidden" name="currentPage" th:value="${currentPage}">
+                    <button type="submit" class="btn btn-danger">
+                        <span class="fw-bold text-white">Apply</span>
+                    </button>
+                </form>
             </div>
             <div th:if="${success}" class="alert alert-success d-flex text-end" role="alert">
                 <strong th:text="${success}"></strong>
@@ -104,7 +112,25 @@
             </tr>
             </tbody>
         </table>
+        <ul class="mt-5 nav nav-pills" style="margin-left: 35%">
+            <li th:each="nb, status : ${nbPages}">
+                <a th:href="@{/patients(page=${status.index}, size=${size})}"
+                   th:class="${currentPage == status.index?'btn btn-success me-3':'btn btn-primary me-3'}">
+                    <span class="fw-bold text-white" th:text="${status.index + 1}"></span>
+                </a>
+            </li>
+        </ul>
     </div>
 </div>
+<script>
+    function updatePagination() {
+        let newSize = document.getElementById("pageSize").value;
+        document.querySelectorAll("ul li a").forEach(link => {
+            let url = new URL(link.href);
+            url.searchParams.set("size", newSize);
+            link.href = url.toString();
+        });
+    }
+</script>
 </body>
 </html>
