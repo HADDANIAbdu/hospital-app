@@ -42,17 +42,23 @@
         <div class="row">
             <div class="d-flex justify-content-between align-items-center py-4 px-5 ">
                 <a href="/patients/create">
-                    <button class="btn add-new btn-primary ms-3" type="button">
-                        <i class="fa-solid fa-plus me-3"></i>
-                        <span>Add New Patient</span>
+                    <button class="btn add-new btn-primary" type="button">
+                        <i class="fa-solid fa-plus ms-n2 me-2"></i>
+                        <span>Add</span>
                     </button>
                 </a>
-                <form th:method="post" th:action="@{/patients/changeSize}" class="d-flex align-items-center mt-3">
-                    <label for="pageSize" class="me-2">Page Size:</label>
-                    <input type="number" name="size" id="pageSize" th:value="${size}" min="1" class="form-control me-2" style="width: 80px;">
+                <form th:method="get" th:action="@{/patients}" class="d-flex align-items-center">
+                    <input type="text" name="keyword" th:value="${keyword}" placeholder="search" class="form-control me-2" style="width: 220px;">
+                    <button type="submit" class="btn btn-outline-info">
+                        <span class="fw-bold">Search</span>
+                    </button>
+                </form>
+                <form th:method="get" th:action="@{/patients(page=${currentPage}, size=${size})}" class="d-flex align-items-center">
+                    <label class="me-2">Page Size :</label>
+                    <input type="text" name="size" th:value="${size}" min="1" class="form-control me-2" pattern="\d*" inputmode="numeric" style="width: 50px;">
                     <input type="hidden" name="currentPage" th:value="${currentPage}">
-                    <button type="submit" class="btn btn-danger">
-                        <span class="fw-bold text-white">Apply</span>
+                    <button type="submit" class="btn btn-outline-info">
+                        <span class="fw-bold">Apply</span>
                     </button>
                 </form>
             </div>
@@ -114,7 +120,7 @@
         </table>
         <ul class="mt-5 nav nav-pills" style="margin-left: 35%">
             <li th:each="nb, status : ${nbPages}">
-                <a th:href="@{/patients(page=${status.index}, size=${size})}"
+                <a th:href="@{/patients(page=${status.index}, size=${size}, keyword=${keyword})}"
                    th:class="${currentPage == status.index?'btn btn-success me-3':'btn btn-primary me-3'}">
                     <span class="fw-bold text-white" th:text="${status.index + 1}"></span>
                 </a>
@@ -122,15 +128,5 @@
         </ul>
     </div>
 </div>
-<script>
-    function updatePagination() {
-        let newSize = document.getElementById("pageSize").value;
-        document.querySelectorAll("ul li a").forEach(link => {
-            let url = new URL(link.href);
-            url.searchParams.set("size", newSize);
-            link.href = url.toString();
-        });
-    }
-</script>
 </body>
 </html>

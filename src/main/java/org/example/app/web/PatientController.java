@@ -21,17 +21,14 @@ public class PatientController {
 
     @GetMapping("/patients")
     public String index(Model model, @RequestParam(value = "page", defaultValue = "0") int page,
-                        @RequestParam(value = "size", defaultValue = "4") int size) {
-        Page<Patient> pagePatients = patientRepository.findAll(PageRequest.of(page, size));
+                        @RequestParam(value = "size", defaultValue = "4") int size,
+                        @RequestParam(value = "keyword", defaultValue = "") String keyword) {
+        Page<Patient> pagePatients = patientRepository.findByFullnameContains(keyword, PageRequest.of(page, size));
         model.addAttribute("nbPages", new int[pagePatients.getTotalPages()]);
         model.addAttribute("patients", pagePatients.getContent());
         model.addAttribute("currentPage", page);
         model.addAttribute("size", size);
+        model.addAttribute("keyword", keyword);
         return "patients";
-    }
-    @PostMapping("/patients/changeSize")
-    public String changePageSize(@RequestParam("size") int size,
-            @RequestParam("currentPage") int currentPage) {
-        return "redirect:/patients?page=" + currentPage + "&size=" + size;
     }
 }
