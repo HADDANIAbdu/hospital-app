@@ -20,13 +20,13 @@ public class HospitalAppApplication implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
         //using builder
-        //Patient patient1 = Patient.builder().Fullname("Darmian Antony").dateOfBirth(new Date()).Gender("Male")
-        //        .sick(false).score(30).build();
-        //PatientRepository.save(patient1);
+        /*Patient patient1 = Patient.builder().fullname("Darmian Antony").dateOfBirth(new Date()).gender("Male")
+                .sick(false).score(30).build();
+        PatientRepository.save(patient1);
         //using constructor with arguments
-        //Patient patient2 = new Patient(null, "Yelmaz adyemi", new Date(),
-        //        "Male", true, 32);
-        //PatientRepository.save(patient2);
+        Patient patient2 = new Patient(null, "Yelmaz adyemi", new Date(),
+                "Male", true, 32);
+        PatientRepository.save(patient2);*/
     }
 }
 

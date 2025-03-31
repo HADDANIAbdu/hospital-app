@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="template">>
+<head>
+  <meta charset="UTF-8">
+  <title>Update Patient</title>
+</head>
+<body>
+<div layout:fragment="content">
+  <div class="container " style="width: 40%">
+    <h2 class="mt-4">Update Patient</h2>
+    <hr>
+    <div th:if="${success}" class="alert alert-success d-flex" role="alert">
+      <strong th:text="${success}"></strong>
+      <button type="button" class="btn-close ms-auto" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    <div th:if="${error}" class="alert alert-danger d-flex" role="alert">
+      <strong th:text="${error}"></strong>
+      <button type="button" class="btn-close ms-auto" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    <form th:action="@{/patients/update(keyword=${keyword},page=${page}, size=${size})}"
+          method="post" th:object="${patient}">
+      <input type="number" class="d-none" th:value="${patient.ID}" name="ID">
+      <div class="mb-3">
+        <label class="form-label">Full Name</label>
+        <input type="text" class="form-control" name="fullname" th:value="${patient.fullname}">
+        <p th:errorclass="text-danger" th:errors="${patient.fullname}"></p>
+      </div>
+      <div class="mb-3">
+        <label class="form-label">Date of Birth</label>
+        <input type="date" class="form-control" name="dateOfBirth" th:value="${#dates.format(patient.dateOfBirth, 'yyyy-MM-dd')}">
+        <p th:errorclass="text-danger" th:errors="${patient.dateOfBirth}"></p>
+      </div>
+      <div class="mb-3">
+        <label class="form-label">Gender</label>
+        <select class="form-select" name="gender" th:value="${patient.gender}">
+          <option value="Male">Male</option>
+          <option value="Female">Female</option>
+        </select>
+        <p th:errorclass="text-danger" th:errors="${patient.gender}"></p>
+      </div>
+      <div class="mb-3">
+        <label class="form-label">Sick</label>
+        <select class="form-select" name="sick" th:value="${patient.sick}">
+          <option value="true">Yes</option>
+          <option value="false">No</option>
+        </select>
+        <p th:errorclass="text-danger" th:errors="${patient.sick}"></p>
+      </div>
+      <div class="mb-3">
+        <label class="form-label">Score</label>
+        <input type="text" name="score" th:value="${patient.score}" min="1" class="form-control"
+               pattern="\d*" inputmode="numeric" style="width: 50px;">
+        <p th:errorclass="text-danger" th:errors="${patient.score}"></p>
+      </div>
+      <button type="submit" class="btn btn-primary">Update</button>
+    </form>
+    <div class="text-end">
+      <a class="ms-2 link-offset-2 link-offset-3-hover
+                      link-underline link-underline-opacity-0 link-underline-opacity-75-hover"
+         href="/patients">Back to List</a>
+    </div>
+  </div>
+</div>
+</body>
+</html>
