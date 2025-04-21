@@ -21,14 +21,18 @@ public class SecurityConfig {
     @Bean
     public InMemoryUserDetailsManager inMemoryUserDetailsManager() {
         return new InMemoryUserDetailsManager(
-                User.withUsername("user1").password(passwordEncoder.encode("1234")).roles("USER").build()
+                User.withUsername("admin").password(passwordEncoder.encode("1234")).roles("ADMIN", "CLIENT").build(),
+                User.withUsername("client").password(passwordEncoder.encode("1234")).roles("CLIENT").build()
         );
     }
 
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http.formLogin(form -> form.permitAll());
+        http.formLogin(form -> form.loginPage("/login").defaultSuccessUrl("/user/patients").permitAll());
+        http.authorizeHttpRequests(auth -> auth.requestMatchers("/css/**", "/vendor/**").permitAll());
+        http.authorizeHttpRequests(auth -> auth.requestMatchers("/user/**").hasRole("CLIENT"));
+        http.authorizeHttpRequests(auth -> auth.requestMatchers("/admin/**").hasRole("ADMIN"));
         http.authorizeHttpRequests(auth -> auth.anyRequest().authenticated());
         return http.build();
     }
